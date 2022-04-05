@@ -1,11 +1,16 @@
 import { CreateReadlineInterface, ReadNthLine,
         ReadNumberOfProblems } from '../../src/utilities/utilities';
 
+import dotenv from 'dotenv';
+
+dotenv.config();
+const filePath = process.env.PATH_TO_PROBLEM_FILE || './test/utilities/mockFile.txt';
+const mockText = process.env.PATH_TO_MOCK_PROBLEM_FILE || './test/utilities/mockText.ts';
+
 // Test for create readline interface 
 describe('Create ReadLine Interface', () => {
     test('Create a readline interface', () => {
-        let filepath = "test/utilities/mockText.txt";
-        CreateReadlineInterface(filepath).then((rl) => {
+        CreateReadlineInterface(mockText).then((rl) => {
             expect(rl).toBeDefined();
             rl.close();
         });
@@ -31,11 +36,9 @@ describe('Create ReadLine Interface', () => {
 // Test the read nth line of a file
 describe('Read the nth line of a txt file', () => {
 
-    let filepath = "test/utilities/mockFile.txt";
-
     test('Read the first line of a file', async () => {
         let n = 1;
-        CreateReadlineInterface(filepath).then((rl) => {
+        CreateReadlineInterface(filePath).then((rl) => {
             ReadNthLine(rl, n).then((line) => {
                 expect(line).toBe("2");
                 rl.close();
@@ -45,7 +48,7 @@ describe('Read the nth line of a txt file', () => {
 
     test('Read Third line of file', () => {
         let n = 3;
-        CreateReadlineInterface(filepath).then((rl) => {
+        CreateReadlineInterface(filePath).then((rl) => {
             ReadNthLine(rl, n).then((line) => {
                 expect(line).toBe("1101");
                 rl.close();
@@ -55,7 +58,7 @@ describe('Read the nth line of a txt file', () => {
 
     test('Read a line that does not exist', () => {
         let n = 100;
-        CreateReadlineInterface(filepath).then((rl) => {
+        CreateReadlineInterface(filePath).then((rl) => {
             ReadNthLine(rl, n).then((line) => {
                 expect(line).toBe("");
                 rl.close();
@@ -68,7 +71,6 @@ describe('Read the nth line of a txt file', () => {
 describe('Read the number of problems in a file', () => {
 
     test('Read the number of problems in a file', async () => {
-        let filePath = "test/utilities/mockFile.txt";
         const numberOfProblems = await ReadNumberOfProblems(filePath);
         expect(numberOfProblems).toBe(2);
     });

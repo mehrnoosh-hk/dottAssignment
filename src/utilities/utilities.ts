@@ -1,6 +1,7 @@
 import * as readline from 'readline';
 import * as fs from 'fs';
 
+
 // TODO: Move error definitions to a file
 
 // Create a readline interface
