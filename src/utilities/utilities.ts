@@ -36,3 +36,18 @@ export function ReadNthLine(rl: readline.Interface, n: number): Promise<string> 
     rl.on('error', reject);
     })
 }
+
+export async function ReadNumberOfProblems(filePath: string): Promise<number> {
+    return new Promise((resolve, reject) => {
+        try {
+            CreateReadlineInterface(filePath).then((rl) => {
+                let lineNumber = 1;
+                ReadNthLine(rl, lineNumber).then((line) => {
+                    resolve(parseInt(line));
+                });
+            });
+        } catch (error) {
+            reject(error);
+        }
+    })
+};

@@ -1,4 +1,5 @@
-import { CreateReadlineInterface, ReadNthLine } from '../../src/utilities/utilities';
+import { CreateReadlineInterface, ReadNthLine,
+        ReadNumberOfProblems } from '../../src/utilities/utilities';
 
 // Test for create readline interface 
 describe('Create ReadLine Interface', () => {
@@ -28,16 +29,47 @@ describe('Create ReadLine Interface', () => {
 // })
 
 // Test the read nth line of a file
-// describe('Read the nth line of a txt file', () => {
+describe('Read the nth line of a txt file', () => {
 
-//     let filepath = "test/utilities/mockFile.txt";
-//     let rl = CreateReadlineInterface(filepath);
+    let filepath = "test/utilities/mockFile.txt";
 
-//     test('Read the first line of a file', async () => {
-//         let n = 1;
-//         const line = await ReadNthLine(rl, n);
-//         expect(line).toBe("2");
-//     });
+    test('Read the first line of a file', async () => {
+        let n = 1;
+        CreateReadlineInterface(filepath).then((rl) => {
+            ReadNthLine(rl, n).then((line) => {
+                expect(line).toBe("2");
+                rl.close();
+            });
+        })
+    });
 
-//     rl.close();
-// })
+    test('Read Third line of file', () => {
+        let n = 3;
+        CreateReadlineInterface(filepath).then((rl) => {
+            ReadNthLine(rl, n).then((line) => {
+                expect(line).toBe("1101");
+                rl.close();
+            });
+        })
+    });
+
+    test('Read a line that does not exist', () => {
+        let n = 100;
+        CreateReadlineInterface(filepath).then((rl) => {
+            ReadNthLine(rl, n).then((line) => {
+                expect(line).toBe("");
+                rl.close();
+            });
+        })
+    });
+})
+
+
+describe('Read the number of problems in a file', () => {
+
+    test('Read the number of problems in a file', async () => {
+        let filePath = "test/utilities/mockFile.txt";
+        const numberOfProblems = await ReadNumberOfProblems(filePath);
+        expect(numberOfProblems).toBe(2);
+    });
+});
