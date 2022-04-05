@@ -24,14 +24,15 @@ export class NearestWhitePixelProblem {
 
     // Find the nearest white pixels for each pixel 
     nearestWhitePixel() {
-        const distanceMatrix: number[][] = [];
+        const distanceMatrix: number[][] = this.matrix;
         for (let i = 0; i < this.matrix.length; i++) {
             for (let j = 0; j < this.matrix[i].length; j++) {
                 const distances = this.ones.map(one => {
                     return Math.abs(one[0] - i) + Math.abs(one[1] - j);
                 })
+                distanceMatrix[i][j] = Math.min(...distances);
             }
         }
+        return distanceMatrix;
     }
-
 }
