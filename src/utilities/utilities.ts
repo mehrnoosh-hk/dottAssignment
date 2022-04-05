@@ -6,11 +6,14 @@ import * as fs from 'fs';
 // Create a readline interface
 export function CreateReadlineInterface(filePath: string): Promise<readline.ReadLine> {
     return new Promise((resolve, reject) => {
-        const rl = readline.createInterface({
-            input: fs.createReadStream(filePath)
-        });
-        resolve(rl);
-        reject(new Error("File not found"));
+        try {
+            const rl = readline.createInterface({
+                input: fs.createReadStream(filePath)
+            });
+            resolve(rl);
+        } catch (error) {
+            reject(error);
+        }
     });
 }
 
