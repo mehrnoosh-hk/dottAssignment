@@ -1,3 +1,4 @@
+[![CI](https://github.com/MehrnooshIO/dottAssignment/actions/workflows/actions.yml/badge.svg?branch=dev)](https://github.com/MehrnooshIO/dottAssignment/actions/workflows/actions.yml)
 # Find The Nearest White Pixel In A Bitmap
 
 ## Problem Description
