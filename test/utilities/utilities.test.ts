@@ -1,37 +1,25 @@
 import { CreateReadlineInterface, ReadNthLine,
         ReadNumberOfProblems } from '../../src/utilities/utilities';
 
-import dotenv from 'dotenv';
 
-dotenv.config();
-const filePath = process.env.PATH_TO_PROBLEM_FILE || 'test/utilities/mockFile.txt';
-const mockText = process.env.PATH_TO_MOCK_PROBLEM_FILE || 'test/utilities/mockText.txt';
+const filePath = 'test/utilities/mockFile.txt';
 
 // Test for create readline interface 
 describe('Create ReadLine Interface', () => {
     test('Create a readline interface', () => {
-        CreateReadlineInterface(mockText).then((rl) => {
+        CreateReadlineInterface(filePath).then((rl) => {
             expect(rl).toBeDefined();
             rl.close();
         });
     });
 
-    // test('Create a readline interface with invalid filepath', () => {
-    //     let filepath = "test/utilities/wrong.txt";
-    //     return expect(CreateReadlineInterface(filepath)).rejects.toMatch('error');
-    // });
+    // TODO: Add test for invalid file path
 })
 
 
 
 // TODO: A worker process has failed to exit gracefully and has been force exited. This is likely caused by tests leaking due to improper teardown. Try running with --detectOpenHandles to find leaks. Active timers can also cause this, ensure that .unref() was called on them.
-// TODO: Create Test Classes
 
-// Test for create readline interface with invalid file path
-// test('Create a readline interface with invalid file path', () => {
-//     let filepath = "test/utilities/wrongName.txt";
-//     expect(() => CreateReadlineInterface(filepath)).toThrow();
-// })
 
 // Test the read nth line of a file
 describe('Read the nth line of a txt file', () => {
