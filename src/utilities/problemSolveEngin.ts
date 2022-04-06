@@ -1,10 +1,11 @@
 import {Utils} from './utilities';
 
-class SolverEngine {
+export class SolverEngine {
     private readonly filePath: string;
     private util: Utils
-    private numberOfProblems: number
-    private dimentions: number[][] = [];
+    public numberOfProblems: number
+    public dimentions: number[][] = [];
+    public allMatrices: number[][][] = [];
 
     constructor(filePath: string) {
         this.filePath = filePath;
@@ -30,6 +31,22 @@ class SolverEngine {
                     const [rows, cols] = line.split(' ').map(Number);
                     this.dimentions.push([rows, cols]);
                     cursor += rows + 1;
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
+    }
+
+    async readMatrix() {
+        let cursor = 2;
+        for (let i = 0; i < this.numberOfProblems; i++) {
+            this.util.readChunk(cursor, cursor + this.dimentions[i][0])
+                .then((matrix) => {
+                    this.allMatrices.push(matrix.map((row) => {
+                        return row.split('').map(Number);
+                    }));
+                    cursor += this.dimentions[i][0] + 1;
                 })
                 .catch((error) => {
                     console.log(error);
