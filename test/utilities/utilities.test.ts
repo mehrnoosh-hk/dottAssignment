@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 const filePath = process.env.PATH_TO_PROBLEM_FILE || 'test/utilities/mockFile.txt';
-const mockText = process.env.PATH_TO_MOCK_PROBLEM_FILE || 'test/utilities/mockText.ts';
+const mockText = process.env.PATH_TO_MOCK_PROBLEM_FILE || 'test/utilities/mockText.txt';
 
 // Test for create readline interface 
 describe('Create ReadLine Interface', () => {
