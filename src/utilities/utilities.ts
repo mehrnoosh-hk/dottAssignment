@@ -70,6 +70,32 @@ export class Utils {
 
 
   /**
+   * Reads the a chunk of file between nth and mth lines.
+   * @param {number} n The line number to start reading from.
+   * @param {number} m The line number to stop reading at.
+   * @return {Promise<string>} A promise that resolves to the
+   * nth line of the file.
+   */
+   readChunk(n: number, m: number):Promise<string[]> {
+    return new Promise((resolve, reject) => {
+      let lineNumber = 0;
+      let stringMatrix: string[] = [];
+      try {
+        this.rl[0].on('line', (line) => {
+          lineNumber++;
+          if (lineNumber >= n && lineNumber <= m) {
+            stringMatrix.push(line);
+          }
+          resolve(stringMatrix);
+        });
+      } catch (error) {
+        reject(error);
+      }
+      this.rl[0].on('error', reject);
+    });
+  }
+
+  /**
    * Reads the number of bitmap problems from test file.
    * @return {Promise<number>} A promise that resolves to the number of
    * bitmap problems in the file.
