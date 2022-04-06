@@ -35,7 +35,3 @@ jobs:
 
       - name: Run tests
         run: npm test
-        env:
-          PATH_TO_PROBLEM_FILE: "test\\utilities\\mockFile.txt"
-          PATH_TO_MOCK_PROBLEM_FILE: "test\\utilities\\mockText.txt"
-
