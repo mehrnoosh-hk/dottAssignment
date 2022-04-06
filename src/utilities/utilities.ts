@@ -5,11 +5,14 @@ import * as fs from 'fs';
  * A class that provides nessessary utility functions to work with test files.
  */
 export class Utils {
-
   public filePath: string;
   public rl: readline.ReadLine[];
 
-  constructor(filePath: string){
+  /**
+   * Initialize an instance of class.
+   * @param {string} filePath The path to the bitmap file.
+   */
+  constructor(filePath: string) {
     this.filePath = filePath;
     this.rl = [];
     this.createReadlineInterface();
@@ -24,19 +27,18 @@ export class Utils {
     if (this.rl.length > 0) {
       return Promise.resolve(this.rl[0]);
     } else {
-
       return new Promise((resolve, reject) => {
         try {
           const rl = readline.createInterface({
-          input: fs.createReadStream(this.filePath),
+            input: fs.createReadStream(this.filePath),
           });
-          this.rl.push(rl)
+          this.rl.push(rl);
           resolve(rl);
         } catch (error) {
           reject(error);
         }
       });
-    }  
+    }
   }
 
   /**
@@ -49,7 +51,7 @@ export class Utils {
   /**
    * Reads the nth line of a file.
    * @param {number} n The line number to read.
-   * @return {Promise<string>} A promise that resolves to the 
+   * @return {Promise<string>} A promise that resolves to the
    * nth line of the file.
    */
   readNthLine(n: number):Promise<string> {
@@ -68,21 +70,21 @@ export class Utils {
 
 
   /**
-   * Reads the number of problems from test file.
-   * @return {Promise<number>} A promise that resolves to the number of problems.
+   * Reads the number of bitmap problems from test file.
+   * @return {Promise<number>} A promise that resolves to the number of
+   * bitmap problems in the file.
    */
-  ReadNumberOfProblems(): Promise<number> {
+  readNumberOfProblems(): Promise<number> {
     return new Promise((resolve, reject) => {
       try {
-          this.readNthLine(1).then((line) => {
-            resolve(parseInt(line));
-          });
-        } catch (error) {
+        this.readNthLine(1).then((line) => {
+          resolve(parseInt(line));
+        });
+      } catch (error) {
         reject(error);
       }
     });
   };
-
 }
 
 // TODO: Move error definitions to a file

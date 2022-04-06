@@ -7,7 +7,7 @@ describe('Test implementation of Utils class', () => {
   const util = new Utils('test/utilities/mockFile.txt');
 
   test('Create a readline interface', () => {
-    expect(util.rl).toBeDefined(); 
+    expect(util.rl).toBeDefined();
   });
 
   test('There is only one instance of readline interface', () => {
@@ -24,13 +24,11 @@ describe('Test implementation of Utils class', () => {
 
   test('Read the third line of file', () => {
     expect(util.readNthLine(3)).resolves.toBe('1101');
-  })
+  });
 
   test('Read the number of problems', () => {
-    expect(util.ReadNumberOfProblems()).resolves.toBe(2);
-  })
-
-  
+    expect(util.readNumberOfProblems()).resolves.toBe(2);
+  });
 });
 
 // TODO: Add test for invalid file path
@@ -38,5 +36,8 @@ describe('Test implementation of Utils class', () => {
 // TODO: Add test for close readline interface
 
 
-// TODO: A worker process has failed to exit gracefully and has been force exited. This is likely caused by tests leaking due to improper teardown. Try running with --detectOpenHandles to find leaks. Active timers can also cause this, ensure that .unref() was called on them.
-
+// TODO: A worker process has failed to exit gracefully and has been force
+// exited. This is likely caused by tests leaking due to improper teardown.
+// Try running with --detectOpenHandles to find leaks.
+// Active timers can also cause this, ensure that .unref()
+// was called on them.

@@ -1,20 +1,34 @@
-
+/**
+ * A class that represent a "Find nearest white pixel" problem
+ */
 export class NearestWhitePixelProblem {
-  /**
-   * Create an instance of NearestWhitePixelProblem.
-   * @param matrix The matrix to find the nearest white pixels for.
-   */
   // TODO: Create a class validator to check if the matrix is valid
+  /**
+   * Matrix representation of a bitmap
+   */
   public matrix: number[][];
   // TODO: Convert to readonly?
+
+  /**
+   * Matrix representation of white pixels in a bitmap
+   */
   public ones: number[][];
+
+  /**
+   * Initialize an instance of NearestWhitePixelProblem class.
+   * @param {number[][]} matrix The matrix representation of a bitmap.
+   */
   constructor(matrix: number[][]) {
     this.matrix = matrix;
     this.ones = this.findWhitePixels();
   }
 
-  // Find all white pixels, entries with value 1
-  findWhitePixels() {
+  /**
+   * Find all white pixels in bitmap
+   * @returns {number[][]} The matrix representation of all white pixels in a
+   * bitmap.
+   */
+  findWhitePixels(): number[][] {
     const ones: number[][] = [];
     for (let i = 0; i < this.matrix.length; i++) {
       for (let j = 0; j < this.matrix[i].length; j++) {
@@ -26,8 +40,12 @@ export class NearestWhitePixelProblem {
     return ones;
   }
 
-  // Find the nearest white pixels for each pixel
-  nearestWhitePixel() {
+  /**
+   * Find the nearest white pixel to the given pixel.
+   * @returns {number[][]} The nearest white pixel to the given pixel in a
+   * bitmap matrix.
+   */
+  nearestWhitePixel(): number[][] {
     const distanceMatrix: number[][] = this.matrix;
     for (let i = 0; i < this.matrix.length; i++) {
       for (let j = 0; j < this.matrix[i].length; j++) {
