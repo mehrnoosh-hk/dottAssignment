@@ -90,7 +90,7 @@ export class Utils {
         });
       } catch (error) {
         reject(error);
-      }
+      } 
       this.rl[0].on('error', reject);
     });
   }
