@@ -9,7 +9,7 @@ for each pixel, computes the distance to the nearest white and writes the result
 
 Table of contents:
 
- 1. [How to set up and run this app] (https://github.com/MehrnooshIO/dottAssignment/tree/dev#how-to-set-up-and-run-this-app)
+ 1. [How to set up and run this app](https://github.com/MehrnooshIO/dottAssignment/tree/dev#how-to-set-up-and-run-this-app)
  2. API Reference
  2.1. Util Class
  2.2. NearestWhitePixel Class

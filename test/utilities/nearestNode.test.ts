@@ -1,4 +1,4 @@
-import {NearestWhitePixelProblem} from '../src/nearestNode';
+import {NearestWhitePixelProblem} from '../../src/utilities/nearestNode';
 
 // TODO: Check for needed mock objects
 
