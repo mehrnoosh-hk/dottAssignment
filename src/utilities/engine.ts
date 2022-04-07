@@ -39,49 +39,33 @@ export class Engine {
         }
     }
 
-
-    solve() {
-        // create a readline interface
-        try {
-            this.createReadlineInterface();
-        } catch (error) {
-            throw error;
-        };
+    async processLineByLine(): Promise<number[][][]> {
 
         let cursor = 0;
-
-        try {
-            this.rl[0].on('line', (line) => {
-                cursor ++;
-                if (cursor === 1) {
-                    this.numberOfProblems = Number(line);
-                } else if (cursor === 2) {
-                    this.dimention = line.split(' ').map(Number);
-                    this.endOfMatrix = cursor + this.dimention[0];
-                } else if (cursor < this.endOfMatrix) {
-                    this.matrix.push(line.split('').map(Number));
-                } else if (cursor === this.endOfMatrix) {
-                    this.matrix.push(line.split('').map(Number));
-                    this.problemMatrices.push(this.matrix);
-                    console.log(this.matrix);
-                    this.matrix = [];
-                } else {
-                    this.dimention = line.split(' ').map(Number);
-                    this.endOfMatrix = cursor + this.dimention[0];
-                }  
-            })
-            
-        } catch (error) {
-            throw error;
+        this.createReadlineInterface();
+        const rl = this.rl[0];
+        for await (const line of rl) {
+            cursor ++;
+            if (cursor === 1) {
+                this.numberOfProblems = Number(line);
+            } else if (cursor === 2) {
+                this.dimention = line.split(' ').map(Number);
+                this.endOfMatrix = cursor + this.dimention[0];
+            } else if (cursor < this.endOfMatrix) {
+                this.matrix.push(line.split('').map(Number));
+            } else if (cursor === this.endOfMatrix) {
+                this.matrix.push(line.split('').map(Number));
+                this.problemMatrices.push(this.matrix);
+                this.matrix = [];
+            } else {
+                this.dimention = line.split(' ').map(Number);
+                this.endOfMatrix = cursor + this.dimention[0];
+            }
         }
-        // pass matrix to the solver
-
-        // return the result
-
-        // Repeat the above steps for all the problems
+        return this.problemMatrices;
     }
 }
 
 
-// const engine = new Engine('/home/mehrnoush/Documents/Programming/dottAssignment/test/utilities/mockFile.txt');
-// engine.solve()
+const engine = new Engine('/home/mehrnoush/Documents/Programming/dottAssignment/test/utilities/mockFile.txt');
+console.log(await engine.processLineByLine());

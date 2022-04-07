@@ -1,10 +1,7 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.NearestWhitePixelProblem = void 0;
 /**
  * A class that represent a "Find nearest white pixel" problem
  */
-class NearestWhitePixelProblem {
+export class NearestWhitePixelProblem {
     /**
      * Initialize an instance of NearestWhitePixelProblem class.
      * @param {number[][]} matrix The matrix representation of a bitmap.
@@ -47,4 +44,3 @@ class NearestWhitePixelProblem {
         return distanceMatrix;
     }
 }
-exports.NearestWhitePixelProblem = NearestWhitePixelProblem;

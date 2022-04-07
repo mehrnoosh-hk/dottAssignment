@@ -14,4 +14,16 @@ describe('Test engine class', () => {
         expect(engine.rl).toBeDefined();
         expect(engine.rl.length).toBe(1);
     });
-})
+
+    const brokenEngine = new Engine('/home/mehrnoush/Documents/Programming/dottAssignment/test/utilities/brokenFile.txt');
+
+    test('Test createReadlineInterface should throw error', () =>{
+        expect(brokenEngine.createReadlineInterface).toThrow();
+    });
+
+    test('Test processLineByLine', async () => {
+        
+        
+    });
+
+})  
