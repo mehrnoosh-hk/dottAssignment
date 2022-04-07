@@ -31,6 +31,7 @@ class Engine {
         this.endOfMatrix = 0;
         this.matrix = [];
         this.problemMatrices = [];
+        this.solutionMatrices = [];
     }
     createReadlineInterface() {
         if (this.rl.length > 0) {
@@ -62,16 +63,12 @@ class Engine {
         try {
             this.rl[0].on('line', (line) => {
                 cursor++;
-                console.log(this.rl[0].cursor);
                 if (cursor === 1) {
                     this.numberOfProblems = Number(line);
-                    console.log(`Number of problems: ${this.numberOfProblems}`);
                 }
                 else if (cursor === 2) {
                     this.dimention = line.split(' ').map(Number);
                     this.endOfMatrix = cursor + this.dimention[0];
-                    console.log(`Dimention: ${this.dimention[0]} ${this.dimention[1]}`);
-                    console.log(`End of matrix: ${this.endOfMatrix}`);
                 }
                 else if (cursor < this.endOfMatrix) {
                     this.matrix.push(line.split('').map(Number));
@@ -91,12 +88,11 @@ class Engine {
         catch (error) {
             throw error;
         }
-        // read the matrix
         // pass matrix to the solver
         // return the result
         // Repeat the above steps for all the problems
     }
 }
 exports.Engine = Engine;
-const engine = new Engine('test/utilities/mockFile.txt');
-engine.solve();
+// const engine = new Engine('/home/mehrnoush/Documents/Programming/dottAssignment/test/utilities/mockFile.txt');
+// engine.solve()

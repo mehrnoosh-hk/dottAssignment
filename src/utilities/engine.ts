@@ -3,12 +3,13 @@ import * as fs from 'fs';
 
 export class Engine {
     public readonly filePath: string;
-    private rl: readline.ReadLine[];
+    public rl: readline.ReadLine[];
     public numberOfProblems: number;
     public dimention: number[];
     public endOfMatrix: number;
     public matrix: number[][];
     public problemMatrices: number[][][];
+    public solutionMatrices: number[][][]
 
 
     constructor(filePath: string) {
@@ -19,6 +20,7 @@ export class Engine {
         this.endOfMatrix = 0;
         this.matrix = [];
         this.problemMatrices = [];
+        this.solutionMatrices = [];
     }
 
     createReadlineInterface() {
@@ -51,15 +53,11 @@ export class Engine {
         try {
             this.rl[0].on('line', (line) => {
                 cursor ++;
-                console.log(this.rl[0].cursor)
                 if (cursor === 1) {
                     this.numberOfProblems = Number(line);
-                    console.log(`Number of problems: ${this.numberOfProblems}`);
                 } else if (cursor === 2) {
                     this.dimention = line.split(' ').map(Number);
                     this.endOfMatrix = cursor + this.dimention[0];
-                    console.log(`Dimention: ${this.dimention[0]} ${this.dimention[1]}`);
-                    console.log(`End of matrix: ${this.endOfMatrix}`);
                 } else if (cursor < this.endOfMatrix) {
                     this.matrix.push(line.split('').map(Number));
                 } else if (cursor === this.endOfMatrix) {
@@ -72,12 +70,10 @@ export class Engine {
                     this.endOfMatrix = cursor + this.dimention[0];
                 }  
             })
+            
         } catch (error) {
             throw error;
         }
-
-        // read the matrix
-
         // pass matrix to the solver
 
         // return the result
@@ -87,5 +83,5 @@ export class Engine {
 }
 
 
-const engine = new Engine('test/utilities/mockFile.txt');
-engine.solve()
+// const engine = new Engine('/home/mehrnoush/Documents/Programming/dottAssignment/test/utilities/mockFile.txt');
+// engine.solve()
