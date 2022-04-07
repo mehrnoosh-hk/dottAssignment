@@ -67,5 +67,5 @@ export class Engine {
 }
 
 
-const engine = new Engine('/home/mehrnoush/Documents/Programming/dottAssignment/test/utilities/mockFile.txt');
-console.log(await engine.processLineByLine());
+// const engine = new Engine('/home/mehrnoush/Documents/Programming/dottAssignment/test/utilities/mockFile.txt');
+// console.log(await engine.processLineByLine());

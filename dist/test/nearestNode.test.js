@@ -1,7 +1,9 @@
-import { NearestWhitePixelProblem } from '../src/nearestNode';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const nearestNode_1 = require("../src/nearestNode");
 // TODO: Check for needed mock objects
 test('class constructor', () => {
-    const testproblem = new NearestWhitePixelProblem([
+    const testproblem = new nearestNode_1.NearestWhitePixelProblem([
         [0, 0, 0, 1],
         [0, 0, 1, 1],
         [0, 1, 1, 0],
@@ -13,7 +15,7 @@ test('class constructor', () => {
     ]);
 });
 test('Find all white pixels', () => {
-    const testproblem = new NearestWhitePixelProblem([
+    const testproblem = new nearestNode_1.NearestWhitePixelProblem([
         [0, 0, 0, 1],
         [0, 0, 1, 1],
         [0, 1, 1, 0],
@@ -27,7 +29,7 @@ test('Find all white pixels', () => {
     ]);
 });
 test('Find the nearest white pixels for each pixel', () => {
-    const testproblem = new NearestWhitePixelProblem([
+    const testproblem = new nearestNode_1.NearestWhitePixelProblem([
         [0, 0, 0, 1],
         [0, 0, 1, 1],
         [0, 1, 1, 0],
