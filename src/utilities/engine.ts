@@ -1,5 +1,6 @@
 import * as readline from 'readline';
 import * as fs from 'fs';
+import { NearestWhitePixelProblem } from './nearestNode';
 
 export class Engine {
     public readonly filePath: string;
@@ -56,13 +57,15 @@ export class Engine {
             } else if (cursor === this.endOfMatrix) {
                 this.matrix.push(line.split('').map(Number));
                 this.problemMatrices.push(this.matrix);
+                const solver = new NearestWhitePixelProblem(this.matrix);
+                this.solutionMatrices.push(solver.nearestWhitePixel());
                 this.matrix = [];
             } else {
                 this.dimention = line.split(' ').map(Number);
                 this.endOfMatrix = cursor + this.dimention[0];
             }
         }
-        return this.problemMatrices;
+        return this.solutionMatrices;
     }
 }
 

@@ -29,6 +29,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Engine = void 0;
 const readline = __importStar(require("readline"));
 const fs = __importStar(require("fs"));
+const nearestNode_1 = require("./nearestNode");
 class Engine {
     constructor(filePath) {
         this.filePath = filePath;
@@ -79,6 +80,8 @@ class Engine {
                 else if (cursor === this.endOfMatrix) {
                     this.matrix.push(line.split('').map(Number));
                     this.problemMatrices.push(this.matrix);
+                    const solver = new nearestNode_1.NearestWhitePixelProblem(this.matrix);
+                    this.solutionMatrices.push(solver.nearestWhitePixel());
                     this.matrix = [];
                 }
                 else {
@@ -94,7 +97,7 @@ class Engine {
             }
             finally { if (e_1) throw e_1.error; }
         }
-        return this.problemMatrices;
+        return this.solutionMatrices;
     }
 }
 exports.Engine = Engine;

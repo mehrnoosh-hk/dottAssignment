@@ -21,10 +21,12 @@ Table of contents:
 1.  Clone this repository to your local machine
 2.  Open the directory of the cloned repository in the terminal and run:
 
-```plaintext
-npm install
-node src/app.js
+```bash
+$ npm install
 ```
-3.  The app asks for address to a txt file representing the bitmap. you can use any of mockfiles which is provided in repository in "mockFiles" directory.
-
-4. A correct6 bitmap representation should adhere to the following rules:
+to install required dependencies
+3.  Run the app with following command and pass the address to a txt file representing the bitmap, as an argument. you can use any of mockfiles which is provided in repository in "mockFiles" directory.
+```bash
+$ node dist/app.js adress/to/file
+```
+4. A correct bitmap representation should adhere to the following rules:
