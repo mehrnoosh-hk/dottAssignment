@@ -24,6 +24,11 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '14.x'
+      - uses: codecov/codecov-action@v2
+        with:
+          files: ./coverage/clover.xml
+          name: codecov-umbrella 
+          verbose: true # optional (default = false) 
 
 
       # Runs a single command using the runners shell
