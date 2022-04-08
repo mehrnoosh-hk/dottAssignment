@@ -9,11 +9,11 @@ for each pixel, computes the distance to the nearest white and writes the result
 
 Table of contents:
 
- 1. [How to set up and run this app](https://github.com/MehrnooshIO/dottAssignment/tree/dev#how-to-set-up-and-run-this-app)
- 2. Reference
- 3. Errors and Error Handling 
+ 1. [How to set up and run this app](https://github.com/MehrnooshIO/dottAssignment/#how-to-set-up-and-run-this-app)
+ 2. [Reference](https://github.com/MehrnooshIO/dottAssignment#refrence)
+ 3. [Errors and Error Handling](https://github.com/MehrnooshIO/dottAssignment#errors-and-error-handling) 
  4. Tests
- 5. Improvements suggestions: 
+ 5. Asyncronous Processing
   
 
 ## How to Set up and Run this APP
@@ -32,8 +32,8 @@ $ node dist/app.js
 ```
 The app asks for file path to the file containing problem cases. you can use any of mockfiles which is provided in repository in "mockFiles" directory.
 
-4. A correct bitmap representation should adhere to the following rules:
 
+---
 ## Refrence
 ### Engine
 Engine is the core of the app. It is responsible for reading the input file, processing the input, sending it to be solved and writing the output.
@@ -56,3 +56,19 @@ This error happens when the number of problems in test file is not a valid integ
 This error happens when the number of rows and columns in a test case is not a valid integer or is greater than 182.
 4. Invalid entry error:
 This error happens when the entry in a test case is not binary or the dimentions do not match the problem specification.
+## Tests
+In order to test the app, you can use the test files in "mockFiles" directory.
+- "bigMockFile.txt" is a file containing 1000 test cases.
+- "mockFile.txt" is a file containing 3 test cases.
+- "mockFile2.txt" is a file containing 1 test case.
+- "invalidNumberOfProblems.txt" is a file with invalid number of test case.
+- "invalidDimentions.txt" is a file with invalid test case dimentions.
+- "invalidLineEntry.txt" is a file with invalid entry.
+
+If you submit a test file, you can see the output of the app in the terminal. If the test file is valid, the app will print the solution to the test case otherwise it will print the error.
+
+## Asynchronous Processing
+At the moment the app is written so that read each test cases from each file and solve them asyncrounously.
+So if a file containes a very large test case which takes a long time to read from the file or recieve from IOT device, the app will be able to read other smaller test cases from other files and solve them.
+Also the process of solveing and reading a test case can be done asynchronously.
+In order to use the full potential of asyncronous features of the app it is better to mark each test case (bitmap matrix) with a unique id so that for each test file it is possible to read smaller test cases (bitmaps with smaller dimentions) first and solve them asynchronously.
