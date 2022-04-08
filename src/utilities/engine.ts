@@ -2,7 +2,7 @@ import * as readline from 'readline';
 import * as fs from 'fs';
 import { NearestWhitePixelProblem } from './nearestNode';
 import { Validation } from './classValidator';
-import { CustomErrors } from './errors';
+
 
 
 /**
@@ -46,9 +46,10 @@ export class Engine {
      */
     public solutionMatrices: number[][][]
 
-
+    /**
+     * An instance of Validation class.
+     */
     public validator: Validation;
-    public ce: CustomErrors;
 
     /**
      * 
@@ -67,7 +68,6 @@ export class Engine {
         this.problemMatrices = [];
         this.solutionMatrices = [];
         this.validator = new Validation(this.filePath);
-        this.ce = new CustomErrors();
     }
 
     /**
@@ -120,7 +120,7 @@ export class Engine {
         if (row.length > 0) {
             this.matrix.push(row);
         } else {
-            throw new Error(`Invalid row at line: ${cursor} => ${line}`);
+            throw new Error(`Invalid entry at line: ${cursor} => ${line}`);
         }
     }
 
@@ -173,8 +173,9 @@ export class Engine {
      */
     async processLineByLine(): Promise<number[][][]> {
 
-        if (!this.validator.isValidAddress)
-
+        if (!this.validator.isValidAddress) {
+            throw new Error(`Invalid file path: ${this.filePath}`);
+        }
         try {
             this.createReadlineInterface();
         } catch (error) {

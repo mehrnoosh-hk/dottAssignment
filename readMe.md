@@ -12,7 +12,8 @@ Table of contents:
  1. [How to set up and run this app](https://github.com/MehrnooshIO/dottAssignment/tree/dev#how-to-set-up-and-run-this-app)
  2. Reference
  3. Errors and Error Handling 
- 4. Improvements suggestions: 
+ 4. Tests
+ 5. Improvements suggestions: 
   
 
 ## How to Set up and Run this APP
@@ -39,7 +40,7 @@ Engine is the core of the app. It is responsible for reading the input file, pro
 Engine main method is `processLineByLine` which recives the filepath, and creates a read stream by calling `createReadlineInterface` method. Then reads the input file line by line and calls appropriate validators to validate the input. As soon as engine reads a valid bitmap matrix it calls an instance of `nearestWhitePixel` class to solve the problem.
 ### Main
 Main is the entry point of the app. It is responsible for creating an instance of `Engine` for each test file and calling `processLineByLine` method. 
-
+Since all methods are implemented asyncronously then it is possible to slove a problem while still reading data of another problem from a file or receive them form perhaph an IOT device. 
 
 ## Errors and Error Handling
 
