@@ -1,9 +1,12 @@
+import * as fs from 'fs';                                                                                                                                       
 /**
  * Validation class contains all methods to validate the input file.
  * All parameters have a default value to determain how the validation will be done 
  * unless the user specifies otherwise.
  */
 export class Validation {
+
+    public filePath: string;
 
     /**
      * @property {number} This property shows the acceptable number of problems
@@ -30,14 +33,20 @@ export class Validation {
      * @param dimentionSeperator 
      * @param rowElementSeperator 
      */
-    constructor(validNumberOfProblems: number = 1000, 
+    constructor(filepath: string,
+                validNumberOfProblems: number = 1000, 
                 validDimention: number = 182, 
                 dimentionSeperator: string = " ", 
                 rowElementSeperator: string = "") {
+        this.filePath = filepath;
         this.validNumberOfProblems = validNumberOfProblems;
         this.validDimention = validDimention;
         this.dimentionSeperator = dimentionSeperator;
         this.rowElementSeperator = rowElementSeperator;
+    }
+
+    isValidAddress(): boolean {
+        return fs.existsSync(this.filePath)  
     }
 
     isValidNumberOfProblems(value: string): number  {

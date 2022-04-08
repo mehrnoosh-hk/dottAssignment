@@ -2,6 +2,7 @@ import * as readline from 'readline';
 import * as fs from 'fs';
 import { NearestWhitePixelProblem } from './nearestNode';
 import { Validation } from './classValidator';
+import { CustomErrors } from './errors';
 
 
 /**
@@ -46,14 +47,15 @@ export class Engine {
     public solutionMatrices: number[][][]
 
 
-    public validator: Validation[];
+    public validator: Validation;
+    public ce: CustomErrors;
 
     /**
      * 
      * @param {string} filePath The path of the file to be processed.
      * @param {number} numberOfProblems The number of problems to be solved.
      * @param {number[]} dimention The dimention of the matrix that engine works on.
-     * @param endOfMatrix The line number containing the last row of matrix.
+     * @param {number} endOfMatrix The line number containing the last row of matrix.
      */
     constructor(filePath: string) {
         this.filePath = filePath;
@@ -64,7 +66,8 @@ export class Engine {
         this.matrix = [];
         this.problemMatrices = [];
         this.solutionMatrices = [];
-        this.validator = [];
+        this.validator = new Validation(this.filePath);
+        this.ce = new CustomErrors();
     }
 
     /**
@@ -76,69 +79,54 @@ export class Engine {
             return this.rl[0];
         } else {
             try {
+                const input = fs.createReadStream(this.filePath);
                 const rl = readline.createInterface({
-                    input: fs.createReadStream(this.filePath),
+                    input: input,
                 });
                 this.rl.push(rl);
                 return rl;
             } catch (error) {
-                throw error;
+                console.log('Bad file path');
+                throw new Error(`Error while creating readline interface: ${error}`);
             }
         }
     }
 
 
-    /**
-     * This method creates a validator for test file validation.
-     * @returns {Validation} The validator instance.
-     */
-    createValidator(): Validation[] {
-        if (this.validator.length > 0) {
-            return this.validator;
-        } else {
-            try {
-                const validator = new Validation();
-                this.validator.push(validator);
-                return this.validator;
-            } catch (error) {
-                throw error;
-            }
-        }
-    }
-
+    
     numberOfProblemsHandler(line: string): void {
 
-        const numberOfProblems = this.validator[0].isValidNumberOfProblems(line);
+        const numberOfProblems = this.validator.isValidNumberOfProblems(line);
         if (numberOfProblems > 0) {
             this.numberOfProblems = numberOfProblems;
         } else {
-            throw new Error(`Invalid number of problems ${this.validator[0].isValidNumberOfProblems(line)}`);
+            throw new Error(`Invalid number of problems ${this.validator.isValidNumberOfProblems(line)}`);
         }
     }
 
     dimentionHandler(cursor:number, line: string): void {
 
-        const dimention = this.validator[0].isValidDimention(line);
+        const dimention = this.validator.isValidDimention(line);
         if (dimention.length > 0) {
             this.dimention = dimention;
             this.endOfMatrix = cursor + this.dimention[0];
         } else {
-            throw new Error('Invalid dimention');
+            throw new Error(`Invalid test case dimention: => "${line}"`);
         }
     }
 
     matrixHandler(cursor: number, line: string): void {
-        const row = this.validator[0].isValidRow(line, this.dimention[1]);
+        const row = this.validator.isValidRow(line, this.dimention[1]);
         if (row.length > 0) {
             this.matrix.push(row);
         } else {
-            throw new Error('Invalid row at line: ' + cursor);
+            throw new Error(`Invalid row at line: ${cursor} => ${line}`);
         }
     }
 
     endOfMatrixHandler(line: string): void {
 
-        const row = this.validator[0].isValidRow(line, this.dimention[1]);
+        const row = this.validator.isValidRow(line, this.dimention[1]);
         if (row.length > 0) {
             this.matrix.push(row);
             this.problemMatrices.push(this.matrix);
@@ -152,7 +140,7 @@ export class Engine {
 
     nextMatrixHandler(cursor:number, line: string): void {
 
-        const dimention = this.validator[0].isValidDimention(line);
+        const dimention = this.validator.isValidDimention(line);
         if (dimention.length > 0) {
             this.dimention = dimention;
             this.endOfMatrix = cursor + this.dimention[0];
@@ -185,15 +173,25 @@ export class Engine {
      */
     async processLineByLine(): Promise<number[][][]> {
 
-        let cursor = 0;
-        this.createReadlineInterface();
-        const rl = this.rl[0];
-        this.createValidator();
-        for await (const line of rl) {
-            cursor ++;
-            this.cursorHandler(cursor, line);
+        if (!this.validator.isValidAddress)
+
+        try {
+            this.createReadlineInterface();
+        } catch (error) {
+            throw new Error(`Error while creating readline interface: ${error}`);
         }
 
+        let cursor = 0;
+        const rl = this.rl[0];
+        
+        for await (const line of rl) {
+            cursor ++;
+            try {
+                this.cursorHandler(cursor, line);
+            } catch (error) {
+                throw new Error(`Error while processing line ${cursor} ${error}`);
+            }
+        }
         return this.problemMatrices;
     }
 }

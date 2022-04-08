@@ -30,3 +30,15 @@ to install required dependencies
 $ node dist/app.js adress/to/file
 ```
 4. A correct bitmap representation should adhere to the following rules:
+
+## Errors and Error Handling
+
+The objective of error handling is to read and solve test cases from a broken file as much as possible. To accomplish this, the app engine reads files line by line until it encounters an error.
+
+Any of the following errors may occur as a result of a faulty test file:
+
+1. Wrong file path - Error code 101
+This error happens when the file address is in the wrong format, or if the file does not exist.
+2. Wrong number of problems in a test file
+3. Wrong dimentions of a test case in a test file
+4. Wrong entry in a test case

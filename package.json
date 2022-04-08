@@ -21,6 +21,7 @@
   "dependencies": {
     "@types/inquirer": "^8.2.1",
     "@types/node": "^17.0.23",
+    "chalk": "^4.1.2",
     "dotenv": "^16.0.0",
     "enquirer": "^2.3.6",
     "inquirer": "^8.2.2",
