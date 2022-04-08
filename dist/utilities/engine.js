@@ -29,7 +29,20 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Engine = void 0;
 const readline = __importStar(require("readline"));
 const fs = __importStar(require("fs"));
+const nearestNode_1 = require("./nearestNode");
+const classValidator_1 = require("./classValidator");
+/**
+ * A class that manage all steps of reading, validation and sending the
+ * problems to be solved and gather the results.
+ */
 class Engine {
+    /**
+     *
+     * @param {string} filePath The path of the file to be processed.
+     * @param {number} numberOfProblems The number of problems to be solved.
+     * @param {number[]} dimention The dimention of the matrix that engine works on.
+     * @param endOfMatrix The line number containing the last row of matrix.
+     */
     constructor(filePath) {
         this.filePath = filePath;
         this.rl = [];
@@ -39,7 +52,12 @@ class Engine {
         this.matrix = [];
         this.problemMatrices = [];
         this.solutionMatrices = [];
+        this.validator = [];
     }
+    /**
+     * This method creates a readline interface of each instance of Engine class
+     * @returns {readline.ReadLine} The readline interface.
+     */
     createReadlineInterface() {
         if (this.rl.length > 0) {
             return this.rl[0];
@@ -57,34 +75,110 @@ class Engine {
             }
         }
     }
+    /**
+     * This method creates a validator for test file validation.
+     * @returns {Validation} The validator instance.
+     */
+    createValidator() {
+        if (this.validator.length > 0) {
+            return this.validator;
+        }
+        else {
+            try {
+                const validator = new classValidator_1.Validation();
+                this.validator.push(validator);
+                return this.validator;
+            }
+            catch (error) {
+                throw error;
+            }
+        }
+    }
+    numberOfProblemsHandler(line) {
+        const numberOfProblems = this.validator[0].isValidNumberOfProblems(line);
+        if (numberOfProblems > 0) {
+            this.numberOfProblems = numberOfProblems;
+        }
+        else {
+            throw new Error(`Invalid number of problems ${this.validator[0].isValidNumberOfProblems(line)}`);
+        }
+    }
+    dimentionHandler(cursor, line) {
+        const dimention = this.validator[0].isValidDimention(line);
+        if (dimention.length > 0) {
+            this.dimention = dimention;
+            this.endOfMatrix = cursor + this.dimention[0];
+        }
+        else {
+            throw new Error('Invalid dimention');
+        }
+    }
+    matrixHandler(cursor, line) {
+        const row = this.validator[0].isValidRow(line, this.dimention[1]);
+        if (row.length > 0) {
+            this.matrix.push(row);
+        }
+        else {
+            throw new Error('Invalid row at line: ' + cursor);
+        }
+    }
+    endOfMatrixHandler(line) {
+        const row = this.validator[0].isValidRow(line, this.dimention[1]);
+        if (row.length > 0) {
+            this.matrix.push(row);
+            this.problemMatrices.push(this.matrix);
+            const solver = new nearestNode_1.NearestWhitePixelProblem(this.matrix);
+            this.solutionMatrices.push(solver.nearestWhitePixel());
+            this.matrix = [];
+        }
+        else {
+            throw new Error('Invalid row at line: ' + this.endOfMatrix);
+        }
+    }
+    nextMatrixHandler(cursor, line) {
+        const dimention = this.validator[0].isValidDimention(line);
+        if (dimention.length > 0) {
+            this.dimention = dimention;
+            this.endOfMatrix = cursor + this.dimention[0];
+        }
+        else {
+            throw new Error('Invalid dimention at line: ' + cursor);
+        }
+    }
+    cursorHandler(cursor, line) {
+        if (cursor === 1) {
+            this.numberOfProblemsHandler(line);
+        }
+        else if (cursor === 2) {
+            this.dimentionHandler(cursor, line);
+        }
+        else if (cursor < this.endOfMatrix) {
+            this.matrixHandler(cursor, line);
+        }
+        else if (cursor === this.endOfMatrix) {
+            this.endOfMatrixHandler(line);
+        }
+        else {
+            this.nextMatrixHandler(cursor, line);
+        }
+    }
+    /**
+     * This method reads a test file line by line an send test matrices
+     * to be solved accordingly.
+     * @returns {Promise<number[][][]>} The promise of the matrix containing all matrices of a
+     * test file.
+     */
     async processLineByLine() {
         var e_1, _a;
         let cursor = 0;
         this.createReadlineInterface();
         const rl = this.rl[0];
+        this.createValidator();
         try {
             for (var rl_1 = __asyncValues(rl), rl_1_1; rl_1_1 = await rl_1.next(), !rl_1_1.done;) {
                 const line = rl_1_1.value;
                 cursor++;
-                if (cursor === 1) {
-                    this.numberOfProblems = Number(line);
-                }
-                else if (cursor === 2) {
-                    this.dimention = line.split(' ').map(Number);
-                    this.endOfMatrix = cursor + this.dimention[0];
-                }
-                else if (cursor < this.endOfMatrix) {
-                    this.matrix.push(line.split('').map(Number));
-                }
-                else if (cursor === this.endOfMatrix) {
-                    this.matrix.push(line.split('').map(Number));
-                    this.problemMatrices.push(this.matrix);
-                    this.matrix = [];
-                }
-                else {
-                    this.dimention = line.split(' ').map(Number);
-                    this.endOfMatrix = cursor + this.dimention[0];
-                }
+                this.cursorHandler(cursor, line);
             }
         }
         catch (e_1_1) { e_1 = { error: e_1_1 }; }
@@ -98,5 +192,5 @@ class Engine {
     }
 }
 exports.Engine = Engine;
-// const engine = new Engine('/home/mehrnoush/Documents/Programming/dottAssignment/test/utilities/mockFile.txt');
-// console.log(await engine.processLineByLine());
+// const engine = new Engine('/home/mehrnoush/Documents/Programming/dottAssignment/mockFiles/mockFile.txt');
+// engine.processLineByLine().then(console.log);
