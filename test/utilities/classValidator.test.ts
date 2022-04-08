@@ -1,7 +1,7 @@
 import { Validation } from "../../src/utilities/classValidator";
 
 describe('Test validators', () => {
-    const validator = new Validation();
+    const validator = new Validation('mockFiles/mockFile.txt');
 
     test('Test validator.isValidNumberOfProblems', () => {
         expect(validator.isValidNumberOfProblems('10')).toBe(10);
