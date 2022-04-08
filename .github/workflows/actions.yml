@@ -29,7 +29,6 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node }}
-          cache: 'npm'
       - uses: codecov/codecov-action@v2
         with:
           files: ./coverage/clover.xml
