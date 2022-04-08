@@ -12,8 +12,8 @@ Table of contents:
  1. [How to set up and run this app](https://github.com/MehrnooshIO/dottAssignment/#how-to-set-up-and-run-this-app)
  2. [Reference](https://github.com/MehrnooshIO/dottAssignment#refrence)
  3. [Errors and Error Handling](https://github.com/MehrnooshIO/dottAssignment#errors-and-error-handling) 
- 4. Tests
- 5. Asyncronous Processing
+ 4. [Tests](https://github.com/MehrnooshIO/dottAssignment#tests)
+ 5. [Asyncronous Processing](https://github.com/MehrnooshIO/dottAssignment#asynchronous-processing)
   
 
 ## How to Set up and Run this APP
@@ -33,7 +33,6 @@ $ node dist/app.js
 The app asks for file path to the file containing problem cases. you can use any of mockfiles which is provided in repository in "mockFiles" directory.
 
 
----
 ## Refrence
 ### Engine
 Engine is the core of the app. It is responsible for reading the input file, processing the input, sending it to be solved and writing the output.
