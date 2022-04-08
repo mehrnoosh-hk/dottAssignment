@@ -1,14 +1,35 @@
-
-class Validator {
+/**
+ * Validation class contains all methods to validate the input file.
+ * All parameters have a default value to determain how the validation will be done 
+ * unless the user specifies otherwise.
+ */
+export class Validation {
 
     /**
-     * @param
+     * @property {number} This property shows the acceptable number of problems
      */
     public validNumberOfProblems: number;
+    /**
+     * @property {number} This property shows the acceptable dimention of the matrix
+     */
     public validDimention: number;
+    /**
+     * @property {string} This property shows the seperator of the dimentions of the matrix in test file
+     */
     public dimentionSeperator: string;
+    /**
+     * @property {string} This property shows the seperator of the row elements in test file
+     */
     public rowElementSeperator: string;
 
+
+    /**
+     * constructor of the class Validator
+     * @param validNumberOfProblems 
+     * @param validDimention 
+     * @param dimentionSeperator 
+     * @param rowElementSeperator 
+     */
     constructor(validNumberOfProblems: number = 1000, 
                 validDimention: number = 182, 
                 dimentionSeperator: string = " ", 
@@ -19,38 +40,47 @@ class Validator {
         this.rowElementSeperator = rowElementSeperator;
     }
 
+    isValidNumberOfProblems(value: string): number  {
+        if (Number(value) <= this.validNumberOfProblems && Number(value) > 0 && 
+            Number(value) % 1 === 0) {
+            return Number(value);
+        }
+        return 0;
+    }
+
+
     /**
      * Check if the string can be converted to number and
      * its value is less than or equal 182
+     * @param {string} value
+     * @returns {number | boolean}
      */
-    isValidDimention(value: string): boolean {
-        if ( Number(value) <= this.validDimention) {
-            return true;
+    isValidDimention(value: string): number[] {
+        const dimention: number[] = value.split(this.dimentionSeperator).map(Number);
+        if (dimention.every(element => element !== NaN) &&
+            dimention.every(element => element <= this.validDimention && element > 0 &&
+            dimention.length === 2)) {
+            return dimention;
         }
-        return false;
+        return [];
     }
 
     /**
-     * Check if the string can be converted to a binary array.
+     * Check if the string can be converted to a binary array with proper length.
      * return converted array if the string is a binary array
      * @param {string} value 
      * @returns {number[] | boolean}
      */
-    isBinary(value: string): number[] | boolean {
+    isValidRow(value: string, cols: number): number[]  {
         const row = value.split(this.rowElementSeperator).map(Number);
-        if (row.every(element => element === 0 || element === 1)) {
+        if (row.every(element => element === 0 || element === 1) && 
+            row.length === cols) {
             return row;
         }
-        return false;
+        return [];
     }
-
-
-
 }
 
 
-const validator = new Validator();
-console.log(validator.isBinary('10101'))
-console.log(validator.isBinary('101B1'))
-
-console.log(validator.isBinary('1031'))
+// const validator = new Validation();
+// console.log(validator.isValidDimention("4 4 4"));

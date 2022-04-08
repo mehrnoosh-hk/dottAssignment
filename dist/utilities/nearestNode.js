@@ -48,3 +48,13 @@ class NearestWhitePixelProblem {
     }
 }
 exports.NearestWhitePixelProblem = NearestWhitePixelProblem;
+// const np = new NearestWhitePixelProblem(
+//   [
+//     [0, 0, 0, 0],
+//     [0, 0, 1, 0],
+//     [1, 0, 0, 1],
+//     [0, 1, 1, 0],
+//   ]
+// )
+// console.log(np.nearestWhitePixel());
+// console.log(np.ones);
