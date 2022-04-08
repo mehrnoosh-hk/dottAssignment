@@ -1,11 +1,22 @@
-import { argv } from "process";
 import { Engine } from "./utilities/engine";
+import { prompt } from 'inquirer';
 
-if (argv[2]) {
-    for (let i =2; i < argv.length; i++) {
-        const engine = new Engine(argv[i]);
-        engine.processLineByLine().then((matrices) => {
-            console.log(matrices);
-        });
-    }
+
+
+async function main() {
+    const answer = await prompt([{
+        name: 'path',
+        message: 'What would you like to say?',
+    }]);
+
+    
+    let addresses = answer['path'].split(' ');
+
+    for (const address of addresses) {
+        console.log(address)
+        const engine = new Engine(address);
+        engine.processLineByLine().then(console.log)
+    } 
 }
+
+main();

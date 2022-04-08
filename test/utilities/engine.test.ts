@@ -24,7 +24,7 @@ describe('Test engine class', () => {
     test('Test processLineByLine', async () => {
         const result = await engine.processLineByLine();
         console.log(result);
-        // expect(result).toEqual(
+        // expect(engine.problemMatrices).toEqual(
         //     [
         //         [ [ 1, 1, 0, 1 ], [ 0, 0, 0, 0 ], [ 0, 1, 0, 1 ], [ 0, 0, 1, 0 ] ],
         //         [ [ 0, 0, 0 ], [ 0, 1, 0 ], [ 0, 0, 1 ] ],
@@ -32,6 +32,13 @@ describe('Test engine class', () => {
         //       ]
         // )
         expect(engine.numberOfProblems).toBe(3);
+        expect(engine.solutionMatrices).toEqual(
+            [
+                [ [0, 0, 1, 0], [1, 1, 2, 1], [1, 0, 1, 0], [2, 1, 0, 1]],
+                [[2, 1, 2], [1, 0, 1], [2, 1, 0]],
+                [[2, 2, 1, 2], [1, 1, 0, 1], [0, 1, 1, 0], [1, 0, 0, 1]]
+            ]
+        )
     });
 
 })  
