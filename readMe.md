@@ -37,8 +37,11 @@ The objective of error handling is to read and solve test cases from a broken fi
 
 Any of the following errors may occur as a result of a faulty test file:
 
-1. Wrong file path - Error code 101
+1. Invalid file path error:
 This error happens when the file address is in the wrong format, or if the file does not exist.
-2. Wrong number of problems in a test file
-3. Wrong dimentions of a test case in a test file
-4. Wrong entry in a test case
+2. Invalid number of problems error:
+This error happens when the number of problems in test file is not a valid integer or is greater than 1000.
+3. Invalid test case dimentions error:
+This error happens when the number of rows and columns in a test case is not a valid integer or is greater than 182.
+4. Invalid entry error:
+This error happens when the entry in a test case is not binary or the dimentions do not match the problem specification.
