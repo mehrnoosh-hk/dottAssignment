@@ -10,11 +10,10 @@ for each pixel, computes the distance to the nearest white and writes the result
 Table of contents:
 
  1. [How to set up and run this app](https://github.com/MehrnooshIO/dottAssignment/tree/dev#how-to-set-up-and-run-this-app)
- 2. API Reference
- 2.1. Util Class
- 2.2. NearestWhitePixel Class
- 3. Improvements suggestions: 
- 3.1 
+ 2. Reference
+ 3. Errors and Error Handling 
+ 4. Improvements suggestions: 
+  
 
 ## How to Set up and Run this APP
 
@@ -25,11 +24,22 @@ Table of contents:
 $ npm install
 ```
 to install required dependencies
-3.  Run the app with following command and pass the address to a txt file representing the bitmap, as an argument. you can use any of mockfiles which is provided in repository in "mockFiles" directory.
+
+3.  Run the app with following command 
 ```bash
-$ node dist/app.js adress/to/file
+$ node dist/app.js
 ```
+The app asks for file path to the file containing problem cases. you can use any of mockfiles which is provided in repository in "mockFiles" directory.
+
 4. A correct bitmap representation should adhere to the following rules:
+
+## Refrence
+### Engine
+Engine is the core of the app. It is responsible for reading the input file, processing the input, sending it to be solved and writing the output.
+Engine main method is `processLineByLine` which recives the filepath, and creates a read stream by calling `createReadlineInterface` method. Then reads the input file line by line and calls appropriate validators to validate the input. As soon as engine reads a valid bitmap matrix it calls an instance of `nearestWhitePixel` class to solve the problem.
+### Main
+Main is the entry point of the app. It is responsible for creating an instance of `Engine` for each test file and calling `processLineByLine` method. 
+
 
 ## Errors and Error Handling
 
