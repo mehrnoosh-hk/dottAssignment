@@ -31,7 +31,7 @@ const readline = __importStar(require("readline"));
 const fs = __importStar(require("fs"));
 const nearestNode_1 = require("./nearestNode");
 const classValidator_1 = require("./classValidator");
-const errors_1 = require("./errors");
+const path = __importStar(require("path"));
 /**
  * A class that manage all steps of reading, validation and sending the
  * problems to be solved and gather the results.
@@ -54,7 +54,6 @@ class Engine {
         this.problemMatrices = [];
         this.solutionMatrices = [];
         this.validator = new classValidator_1.Validation(this.filePath);
-        this.ce = new errors_1.CustomErrors();
     }
     /**
      * This method creates a readline interface of each instance of Engine class
@@ -104,7 +103,7 @@ class Engine {
             this.matrix.push(row);
         }
         else {
-            throw new Error(`Invalid row at line: ${cursor} => ${line}`);
+            throw new Error(`Invalid entry at line: ${cursor} => ${line}`);
         }
     }
     endOfMatrixHandler(line) {
@@ -113,7 +112,8 @@ class Engine {
             this.matrix.push(row);
             this.problemMatrices.push(this.matrix);
             const solver = new nearestNode_1.NearestWhitePixelProblem(this.matrix);
-            this.solutionMatrices.push(solver.nearestWhitePixel());
+            const solution = solver.nearestWhitePixel();
+            this.solutionMatrices.push(solution);
             this.matrix = [];
         }
         else {
@@ -147,6 +147,14 @@ class Engine {
             this.nextMatrixHandler(cursor, line);
         }
     }
+    async writeResults() {
+        const resultPath = path.basename(this.filePath, '.txt') + '_result.txt';
+        const ws = fs.createWriteStream(resultPath);
+        for (const matrix of this.solutionMatrices) {
+            const data = matrix.map(row => row.join(' ')).join('\n');
+            ws.write(data + '\n');
+        }
+    }
     /**
      * This method reads a test file line by line an send test matrices
      * to be solved accordingly.
@@ -155,13 +163,15 @@ class Engine {
      */
     async processLineByLine() {
         var e_1, _a;
-        if (!this.validator.isValid)
-            try {
-                this.createReadlineInterface();
-            }
-            catch (error) {
-                throw new Error(`Error while creating readline interface: ${error}`);
-            }
+        if (!this.validator.isValidAddress) {
+            throw new Error(`Invalid file path: ${this.filePath}`);
+        }
+        try {
+            this.createReadlineInterface();
+        }
+        catch (error) {
+            throw new Error(`Error while creating readline interface: ${error}`);
+        }
         let cursor = 0;
         const rl = this.rl[0];
         try {
@@ -183,6 +193,7 @@ class Engine {
             }
             finally { if (e_1) throw e_1.error; }
         }
+        await this.writeResults();
         return this.problemMatrices;
     }
 }
