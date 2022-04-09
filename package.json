@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "jest",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+    "lint": "eslint . --ext .ts,.tsx"
   },
   "author": "Mehrnoosh H. Kashani",
   "license": "ISC",

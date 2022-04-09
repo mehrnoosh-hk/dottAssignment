@@ -38,12 +38,14 @@ const path = __importStar(require("path"));
  */
 class Engine {
     /**
-     *
-     * @param {string} filePath The path of the file to be processed.
-     * @param {number} numberOfProblems The number of problems to be solved.
-     * @param {number[]} dimention The dimention of the matrix that engine works on.
-     * @param {number} endOfMatrix The line number containing the last row of matrix.
-     */
+       *
+       * @param {string} filePath The path of the file to be processed.
+       * @param {number} numberOfProblems The number of problems to be solved.
+       * @param {number[]} dimention The dimention of the matrix that engine
+       * works on.
+       * @param {number} endOfMatrix The line number containing the last row
+       * of matrix.
+       */
     constructor(filePath) {
         this.filePath = filePath;
         this.rl = [];
@@ -56,9 +58,10 @@ class Engine {
         this.validator = new classValidator_1.Validation(this.filePath);
     }
     /**
-     * This method creates a readline interface of each instance of Engine class
-     * @returns {readline.ReadLine} The readline interface.
-     */
+       * This method creates a readline interface of each instance of
+       * Engine class
+       * @return {readline.ReadLine} The readline interface.
+       */
     createReadlineInterface() {
         if (this.rl.length > 0) {
             return this.rl[0];
@@ -78,15 +81,29 @@ class Engine {
             }
         }
     }
+    /**
+     * This method is responsible for handling the validation of first line
+     * of submitted test file and throw appropriate error if it is invalid.
+     * @param {string} line The line to be processed.
+     */
     numberOfProblemsHandler(line) {
         const numberOfProblems = this.validator.isValidNumberOfProblems(line);
         if (numberOfProblems > 0) {
             this.numberOfProblems = numberOfProblems;
         }
         else {
-            throw new Error(`Invalid number of problems ${this.validator.isValidNumberOfProblems(line)}`);
+            throw new Error(`Invalid number of problems \
+                      ${this.validator.isValidNumberOfProblems(line)}`);
         }
     }
+    /**
+     * This method is responsible for handling the validation of the line
+     * containing the dimention of the matrix and throw appropriate error if
+     * it is invalid.
+     * @param {number} cursor The line number which is being processed.
+     * @param {string} line The line to be processed.
+     * @throws {Error} If the line is invalid.
+      */
     dimentionHandler(cursor, line) {
         const dimention = this.validator.isValidDimention(line);
         if (dimention.length > 0) {
@@ -97,6 +114,14 @@ class Engine {
             throw new Error(`Invalid test case dimention: => "${line}"`);
         }
     }
+    /**
+     * This method is responsible for handling the validation of each line
+     * of the matrix and throw appropriate error if it is invalid. If the line
+     * is a valid row, it will be added to the matrix.
+     * @param {number} cursor The line number which is being processed.
+     * @param {string} line The line to be processed.
+     * @throws {Error} If the line is invalid.
+     */
     matrixHandler(cursor, line) {
         const row = this.validator.isValidRow(line, this.dimention[1]);
         if (row.length > 0) {
@@ -106,6 +131,15 @@ class Engine {
             throw new Error(`Invalid entry at line: ${cursor} => ${line}`);
         }
     }
+    /**
+     * This method is responsible for handling the process and validation of
+     * the last line of the matrix and throw appropriate error if it is invalid.
+     * If the line is a valid row, it will be added to the matrix. Then the
+     * matrix will be added to the problemMatrices array.
+     * Also the matrix will be sent to the NearestWhitePixelProblem class to
+     * be solved.
+     * @param {string} line The line to be processed.
+     */
     endOfMatrixHandler(line) {
         const row = this.validator.isValidRow(line, this.dimention[1]);
         if (row.length > 0) {
@@ -120,6 +154,15 @@ class Engine {
             throw new Error('Invalid row at line: ' + this.endOfMatrix);
         }
     }
+    /**
+     * This method is responsible for handling the process and validation of
+     * next test case in submitted file.
+     * The method checks if the line is a valid dimention line and throw
+     * appropriate error if it is invalid. If the line
+     * @param {number} cursor The line number which is being processed.
+     * @param {string} line The line to be processed.
+     * @throws {Error} If the line is invalid.
+     */
     nextMatrixHandler(cursor, line) {
         const dimention = this.validator.isValidDimention(line);
         if (dimention.length > 0) {
@@ -130,6 +173,13 @@ class Engine {
             throw new Error('Invalid dimention at line: ' + cursor);
         }
     }
+    /**
+     * This method is responsible for handling the process of reading submitted
+     * file line by line. This method keeps track of which line is being
+     * processed and calls the appropriate handler method.
+     * @param {number} cursor The line number which is being processed.
+     * @param {string} line The line to be processed.
+     */
     cursorHandler(cursor, line) {
         if (cursor === 1) {
             this.numberOfProblemsHandler(line);
@@ -147,20 +197,23 @@ class Engine {
             this.nextMatrixHandler(cursor, line);
         }
     }
+    /**
+     * This method is responsible for writing the solution to the file.
+     */
     async writeResults() {
         const resultPath = path.basename(this.filePath, '.txt') + '_result.txt';
         const ws = fs.createWriteStream(resultPath);
         for (const matrix of this.solutionMatrices) {
-            const data = matrix.map(row => row.join(' ')).join('\n');
+            const data = matrix.map((row) => row.join(' ')).join('\n');
             ws.write(data + '\n');
         }
     }
     /**
-     * This method reads a test file line by line an send test matrices
-     * to be solved accordingly.
-     * @returns {Promise<number[][][]>} The promise of the matrix containing all matrices of a
-     * test file.
-     */
+       * This method reads a test file line by line an send test matrices
+       * to be solved accordingly.
+       * @returns {Promise<number[][][]>} The promise of the matrix containing
+       * all matrices of a test file.
+       */
     async processLineByLine() {
         var e_1, _a;
         if (!this.validator.isValidAddress) {
@@ -198,5 +251,3 @@ class Engine {
     }
 }
 exports.Engine = Engine;
-// const engine = new Engine('/home/mehrnoush/Documents/Programming/dottAssignment/mockFiles/mockFile.txt');
-// engine.processLineByLine().then(console.log);

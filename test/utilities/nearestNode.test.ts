@@ -3,7 +3,6 @@ import {NearestWhitePixelProblem} from '../../src/utilities/nearestNode';
 // TODO: Check for needed mock objects
 
 describe('Test Solving Nearest white pixel problem', () => {
-
   test('class constructor', () => {
     const testproblem = new NearestWhitePixelProblem([
       [0, 0, 0, 1],
@@ -16,8 +15,8 @@ describe('Test Solving Nearest white pixel problem', () => {
       [0, 1, 1, 0],
     ]);
   });
-  
-  
+
+
   test('Find all white pixels', () => {
     const testproblem = new NearestWhitePixelProblem([
       [0, 0, 0, 1],
@@ -32,7 +31,7 @@ describe('Test Solving Nearest white pixel problem', () => {
       [2, 2],
     ]);
   });
-  
+
   test('Find the nearest white pixels for each pixel', () => {
     const testproblem = new NearestWhitePixelProblem([
       [0, 0, 0, 1],
@@ -60,6 +59,5 @@ describe('Test Solving Nearest white pixel problem', () => {
       [1, 0, 0, 1],
     ]);
   });
-
-})
+});
 
