@@ -21,11 +21,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Validation = void 0;
 const fs = __importStar(require("fs"));
-/**
- * Validation class contains all methods to validate the input file.
- * All parameters have a default value to determain how the validation
- * will be done. unless the user specifies otherwise.
- */
 class Validation {
     /**
        * constructor of the class Validator

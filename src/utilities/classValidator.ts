@@ -4,7 +4,19 @@ import * as fs from 'fs';
  * All parameters have a default value to determain how the validation
  * will be done. unless the user specifies otherwise.
  */
+
+export type fileConfig = {
+  filePath: string,
+  validNumberOfProblems?: number,
+  validDimention?: number,
+  dimentionSeprator?: string,
+  rowElementSeprator?: string,
+}
+
 export class Validation {
+  /**
+     * @property {string} filePath The path of the file to be processed.
+     */
   public filePath: string;
 
   /**

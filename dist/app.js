@@ -6,10 +6,38 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const engine_1 = require("./utilities/engine");
 const inquirer_1 = require("inquirer");
 const chalk_1 = __importDefault(require("chalk"));
-/**
- * This method asks user to submit file path to test cases.
- * @return {string} user answer
- */
+async function testFileConfig() {
+    const config = await (0, inquirer_1.prompt)([{
+            name: 'maxNumberOfProblems',
+            message: 'Please enter max number of problems:',
+            type: 'input',
+            default: 1000,
+        }, {
+            name: 'validDimention',
+            message: 'Please enter valid dimention:',
+            type: 'input',
+            default: 182,
+        }, {
+            name: 'dimentionSeperator',
+            message: 'Please enter dimention seperator:',
+            type: 'list',
+            choices: ['space', '-', '_', '.', 'Nothing'],
+            default: 'space',
+        }, {
+            name: 'rowElementSeprator',
+            message: 'Please enter matrix entry seperator:',
+            type: 'list',
+            choices: ['space', '-', '_', '.', 'Nothing'],
+            default: 'Nothing',
+        }, {
+            name: 'resultSeperator',
+            message: 'Please enter result matrix seperator',
+            type: 'list',
+            choices: ['space', '-', '_', '.', 'Nothing'],
+            default: 'space',
+        }]);
+    return config;
+}
 async function takeInput() {
     const answer = await (0, inquirer_1.prompt)([{
             name: 'path',
@@ -22,6 +50,7 @@ async function takeInput() {
  * The entry point of the program.
  */
 async function main() {
+    const config = await testFileConfig();
     const answer = await takeInput();
     const addresses = answer['path'].split(' ');
     for (const address of addresses) {
