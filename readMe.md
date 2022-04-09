@@ -85,3 +85,4 @@ In order to use the full potential of asyncronous features of the app it is bett
 ## Improvements
 - [ ] Add a feature to ask the user for output destination.
 - [ ] Add some test cases to improve the test coverage. At this moment test coverage is about 83%
+- [ ] Add a feature to ask user for test file configuration at beginning of the app.
