@@ -2,6 +2,7 @@ import * as readline from 'readline';
 import * as fs from 'fs';
 import { NearestWhitePixelProblem } from './nearestNode';
 import { Validation } from './classValidator';
+import * as path from 'path';
 
 
 
@@ -131,7 +132,8 @@ export class Engine {
             this.matrix.push(row);
             this.problemMatrices.push(this.matrix);
             const solver = new NearestWhitePixelProblem(this.matrix);
-            this.solutionMatrices.push(solver.nearestWhitePixel());
+            const solution = solver.nearestWhitePixel();
+            this.solutionMatrices.push(solution);
             this.matrix = [];
         } else {
             throw new Error('Invalid row at line: ' + this.endOfMatrix);
@@ -164,6 +166,16 @@ export class Engine {
        }
     }
 
+    async writeResults() {
+        const resultPath = path.basename(this.filePath, '.txt') + '_result.txt';
+        const ws = fs.createWriteStream(resultPath);
+
+        for (const matrix of this.solutionMatrices) {
+            const data = matrix.map(row => row.join(' ')).join('\n');
+            ws.write(data + '\n');
+        }
+    }
+
 
     /**
      * This method reads a test file line by line an send test matrices 
@@ -193,6 +205,7 @@ export class Engine {
                 throw new Error(`Error while processing line ${cursor} ${error}`);
             }
         }
+        await this.writeResults();
         return this.problemMatrices;
     }
 }

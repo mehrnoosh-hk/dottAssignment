@@ -21,6 +21,8 @@ async function main() {
         try{
             const data = await engine.processLineByLine()
             console.log(data);
+            
+              
         } catch (error) {
             console.log(chalk.red(`Error while processing file: ${address}`));
             console.log(chalk.red(error));

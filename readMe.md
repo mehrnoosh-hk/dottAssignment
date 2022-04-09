@@ -12,14 +12,14 @@ Table of contents:
  1. [How to set up and run this app](https://github.com/MehrnooshIO/dottAssignment/#how-to-set-up-and-run-this-app)
  2. [Reference](https://github.com/MehrnooshIO/dottAssignment#refrence)
  3. [Errors and Error Handling](https://github.com/MehrnooshIO/dottAssignment#errors-and-error-handling) 
- 4. Tests
- 5. Asyncronous Processing
-  
+ 4. [Tests](https://github.com/MehrnooshIO/dottAssignment#tests)
+ 5. [Asyncronous Processing](https://github.com/MehrnooshIO/dottAssignment#asynchronous-processing)
+ 6. [Improvements](https://github.com/MehrnooshIO/dottAssignment#improvements) 
 
 ## How to Set up and Run this APP
 
 1.  Clone this repository to your local machine
-2.  Open the directory of the cloned repository in the terminal and run:
+2.  In order to install dependencies open the directory of the cloned repository in the terminal and run:
 
 ```bash
 $ npm install
@@ -30,17 +30,25 @@ to install required dependencies
 ```bash
 $ node dist/app.js
 ```
-The app asks for file path to the file containing problem cases. you can use any of mockfiles which is provided in repository in "mockFiles" directory.
+The app asks you to submit file path to the file containing problem cases. you can use any of mockfiles which is provided in repository in "mockFiles" directory.
+The app prints the result to terminal and also creates a file named "testfilename_result.txt" in the main directory of the app.
 
-
----
 ## Refrence
+
 ### Engine
 Engine is the core of the app. It is responsible for reading the input file, processing the input, sending it to be solved and writing the output.
 Engine main method is `processLineByLine` which recives the filepath, and creates a read stream by calling `createReadlineInterface` method. Then reads the input file line by line and calls appropriate validators to validate the input. As soon as engine reads a valid bitmap matrix it calls an instance of `nearestWhitePixel` class to solve the problem.
 ### Main
 Main is the entry point of the app. It is responsible for creating an instance of `Engine` for each test file and calling `processLineByLine` method. 
-Since all methods are implemented asyncronously then it is possible to slove a problem while still reading data of another problem from a file or receive them form perhaph an IOT device. 
+Since all methods are implemented asyncronously then it is possible to slove a problem while still reading data of another problem from a file or receive them form perhaph an IOT device.
+### Validator
+This class is responsible for validating the input. This class accepts input configuration which includes following properties:
+- `filePath`: path to the file containing the input
+- `valid number of problems`: The default value is 1000
+- `valid dimentions`: The default value is 182
+- `valid dimention seperator`: The default value is " "
+- `valid input seperator`: The default value is ""
+In case you want to submit a test case with diffrenet format, it is enough to change the setting of validator.
 
 ## Errors and Error Handling
 
@@ -68,7 +76,12 @@ In order to test the app, you can use the test files in "mockFiles" directory.
 If you submit a test file, you can see the output of the app in the terminal. If the test file is valid, the app will print the solution to the test case otherwise it will print the error.
 
 ## Asynchronous Processing
+
 At the moment the app is written so that read each test cases from each file and solve them asyncrounously.
 So if a file containes a very large test case which takes a long time to read from the file or recieve from IOT device, the app will be able to read other smaller test cases from other files and solve them.
 Also the process of solveing and reading a test case can be done asynchronously.
 In order to use the full potential of asyncronous features of the app it is better to mark each test case (bitmap matrix) with a unique id so that for each test file it is possible to read smaller test cases (bitmaps with smaller dimentions) first and solve them asynchronously.
+
+## Improvements
+- [ ] Add a feature to ask the user for output destination.
+- [ ] Add some test cases to improve the test coverage. At this moment test coverage is about 83%
