@@ -29,7 +29,8 @@ const fs = __importStar(require("fs"));
 class Validation {
     /**
        * constructor of the class Validator
-       * @param {FileConfig} config The configuration of the submitted problem file.
+       * @param {FileConfig} config The configuration of the submitted
+       * problem file.
        */
     constructor(config) {
         this.config = config;

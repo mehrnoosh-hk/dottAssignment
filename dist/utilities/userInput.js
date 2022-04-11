@@ -5,14 +5,14 @@ const inquirer_1 = require("inquirer");
 /**
  * This function is responsible for recieving path to the problem file and its
  * configuration.
- * @returns {Promise}
+ * @return {Promise}
  */
 async function testFileConfig() {
     const config = await (0, inquirer_1.prompt)([{
             name: 'filePath',
             message: 'Please enter the path to the file containing test cases:',
             type: 'input',
-            default: 'mockFiles/mockFile.txt'
+            default: 'mockFiles/mockFile.txt',
         }, {
             name: 'maxNumberOfProblems',
             message: 'Please enter max number of problems:',

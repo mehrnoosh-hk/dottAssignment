@@ -23,7 +23,15 @@ exports.FileService = void 0;
 const fs = __importStar(require("fs"));
 const readline = __importStar(require("readline"));
 const path = __importStar(require("path"));
+/**
+ * File service class contains all methods to read and write to a file.
+ */
 class FileService {
+    /**
+     * Constructor of the FileService class.
+     * @param {FileConfig} fileConfig The configuration of the submitted
+     * problem file.
+     */
     constructor(fileConfig) {
         this.filePath = fileConfig.filePath;
         this.readline = readline.createInterface({
@@ -31,6 +39,10 @@ class FileService {
         });
         this.writeStream = fs.createWriteStream(path.basename(this.filePath, '.txt') + '_result.txt');
     }
+    /**
+     * Method to write to the file.
+     * @param {string} data The data to be written to the file.
+     */
     write(data) {
         this.writeStream.write(data + '\n');
     }

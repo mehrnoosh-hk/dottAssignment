@@ -1,6 +1,6 @@
 import {NearestWhitePixelProblem} from './nearestNode';
 import {IValidatorService} from './classValidator';
-import { IFileService } from './fileService';
+import {IFileService} from './fileService';
 
 
 /**
@@ -8,12 +8,11 @@ import { IFileService } from './fileService';
  * problems to be solved and gather the results.
  */
 export class Engine {
-
   /**
      * @property {IFileService} fs The file service interface.
      */
   public fs: IFileService;
-  
+
   /**
      * @property {number[]} dimention The dimention of the current matrix
      * that engine works on.
@@ -45,17 +44,14 @@ export class Engine {
   public validator: IValidatorService;
 
   /**
-     *
-     * @param {number[]} dimention The dimention of the matrix that engine
-     * works on.
-     * @param {number} endOfMatrix The line number containing the last row
-     * of matrix.
+     * Constructor of the Engine class.
+     * @param {IValidatorService} validator The validator service interface.
+     * @param {IFileService} fileService The file service interface.
      */
   constructor(
-    validator: IValidatorService,
-    fileService: IFileService,
+      validator: IValidatorService,
+      fileService: IFileService,
   ) {
-
     this.validator = validator;
     this.fs = fileService;
     this.dimention = [];
@@ -181,8 +177,6 @@ export class Engine {
    * This method is responsible for writing the solution to the file.
    */
   async writeResults() {
-    
-
     for (const matrix of this.solutionMatrices) {
       const data = matrix.map((row) => row.join(' ')).join('\n');
       this.fs.write(data);
@@ -197,7 +191,6 @@ export class Engine {
      * all matrices of a test file.
      */
   async processLineByLine(): Promise<number[][][]> {
-
     if (!this.validator.isValidAddress) {
       throw new Error('Invalid file path');
     }

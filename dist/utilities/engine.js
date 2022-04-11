@@ -15,11 +15,9 @@ const nearestNode_1 = require("./nearestNode");
  */
 class Engine {
     /**
-       *
-       * @param {number[]} dimention The dimention of the matrix that engine
-       * works on.
-       * @param {number} endOfMatrix The line number containing the last row
-       * of matrix.
+       * Constructor of the Engine class.
+       * @param {IValidatorService} validator The validator service interface.
+       * @param {IFileService} fileService The file service interface.
        */
     constructor(validator, fileService) {
         this.validator = validator;

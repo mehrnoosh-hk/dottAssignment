@@ -2,7 +2,6 @@ import {Validation} from '../../src/utilities/classValidator';
 import {FileConfig} from '../../src/utilities/config';
 
 describe('Test validators', () => {
-
   const mockConfig: FileConfig = {
     filePath: '../mockFiles/mockFile.txt',
     maxNumberOfProblems: 1000,
@@ -11,7 +10,7 @@ describe('Test validators', () => {
     rowElementSeperator: '',
     resultSeperator: ' ',
     testCaseSeperator: '\n',
-  }
+  };
   const validator = new Validation(mockConfig);
 
   test('Test validator.isValidNumberOfProblems', () => {

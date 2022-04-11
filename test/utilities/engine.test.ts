@@ -4,7 +4,6 @@ import {FileService} from '../../src/utilities/fileService';
 import {Validation} from '../../src/utilities/classValidator';
 
 describe('Test engine class', () => {
-
   const mockConfig: FileConfig = {
     filePath: './mockFiles/mockFile.txt',
     maxNumberOfProblems: 1000,
@@ -13,8 +12,10 @@ describe('Test engine class', () => {
     rowElementSeperator: '',
     resultSeperator: ' ',
     testCaseSeperator: '\n',
-  }
-  const engine = new Engine(new Validation(mockConfig), new FileService(mockConfig));
+  };
+  const engine = new Engine(
+      new Validation(mockConfig), new FileService(mockConfig),
+  );
 
   test('Test construction of engine', () => {
     expect(engine).toBeDefined();

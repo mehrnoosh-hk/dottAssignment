@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import { FileConfig } from './config';
+import {FileConfig} from './config';
 
 /**
  * Interface for the validator service.
@@ -18,18 +18,19 @@ export interface IValidatorService {
  * will be done. unless the user specifies otherwise.
  */
 export class Validation implements IValidatorService {
-
   /**
-   * @property {FileConfig} fileConfig The configuration of the submitted problem file.
+   * @property {FileConfig} fileConfig The configuration of the submitted
+   * problem file.
    */
   public config:FileConfig;
 
 
   /**
      * constructor of the class Validator
-     * @param {FileConfig} config The configuration of the submitted problem file. 
+     * @param {FileConfig} config The configuration of the submitted
+     * problem file.
      */
-  constructor (config: FileConfig) {
+  constructor(config: FileConfig) {
     this.config = config;
   }
 
