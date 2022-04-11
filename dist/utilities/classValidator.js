@@ -29,25 +29,18 @@ const fs = __importStar(require("fs"));
 class Validation {
     /**
        * constructor of the class Validator
-       * @param {string} filepath The path of the file to be validated
-       * @param {number} validNumberOfProblems
-       * @param {number} validDimention
-       * @param {string} dimentionSeperator
-       * @param {string} rowElementSeperator
+       * @param {FileConfig} config The configuration of the submitted
+       * problem file.
        */
-    constructor(filepath, validNumberOfProblems = 1000, validDimention = 182, dimentionSeperator = ' ', rowElementSeperator = '') {
-        this.filePath = filepath;
-        this.validNumberOfProblems = validNumberOfProblems;
-        this.validDimention = validDimention;
-        this.dimentionSeperator = dimentionSeperator;
-        this.rowElementSeperator = rowElementSeperator;
+    constructor(config) {
+        this.config = config;
     }
     /**
      * Check if the file path is valid and the file exists
      * @return {boolean}
      */
     isValidAddress() {
-        return fs.existsSync(this.filePath);
+        return fs.existsSync(this.config.filePath);
     }
     /**
      * Checks if the number of problems in the submitted file is valid according
@@ -57,7 +50,7 @@ class Validation {
      * if it is valid otherwise 0
      */
     isValidNumberOfProblems(value) {
-        if (Number(value) <= this.validNumberOfProblems && Number(value) > 0 &&
+        if (Number(value) <= this.config.maxNumberOfProblems && Number(value) > 0 &&
             Number(value) % 1 === 0) {
             return Number(value);
         }
@@ -70,10 +63,10 @@ class Validation {
        * @return {number | boolean}
        */
     isValidDimention(value) {
-        const dimention = value.split(this.dimentionSeperator)
+        const dimention = value.split(this.config.dimentionSeperator)
             .map(Number);
         if (dimention.every((element) => element !== NaN) &&
-            dimention.every((element) => element <= this.validDimention && element > 0 &&
+            dimention.every((element) => element <= this.config.validDimention && element > 0 &&
                 dimention.length === 2)) {
             return dimention;
         }
@@ -88,7 +81,7 @@ class Validation {
        * @return {number[] | boolean}
        */
     isValidRow(value, cols) {
-        const row = value.split(this.rowElementSeperator).map(Number);
+        const row = value.split(this.config.rowElementSeperator).map(Number);
         if (row.every((element) => element === 0 || element === 1) &&
             row.length === cols) {
             return row;

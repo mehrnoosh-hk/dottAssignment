@@ -1,8 +1,6 @@
-import * as readline from 'readline';
-import * as fs from 'fs';
 import {NearestWhitePixelProblem} from './nearestNode';
-import {Validation} from './classValidator';
-import * as path from 'path';
+import {IValidatorService} from './classValidator';
+import {IFileService} from './fileService';
 
 
 /**
@@ -11,19 +9,12 @@ import * as path from 'path';
  */
 export class Engine {
   /**
-     * @property {string} filePath The path of the file to be processed.
+     * @property {IFileService} fs The file service interface.
      */
-  public readonly filePath: string;
+  public fs: IFileService;
+
   /**
-     * @property {readline.ReadLine} rl The readline interface.
-     */
-  public rl: readline.ReadLine[];
-  /**
-     * @property {number} numberOfProblems The number of problems to be solved.
-     */
-  public numberOfProblems: number;
-  /**
-     * @property {number[]} dimention The dimention of the matrix
+     * @property {number[]} dimention The dimention of the current matrix
      * that engine works on.
      */
   public dimention: number[];
@@ -50,51 +41,26 @@ export class Engine {
   /**
      * An instance of Validation class.
      */
-  public validator: Validation;
+  public validator: IValidatorService;
 
   /**
-     *
-     * @param {string} filePath The path of the file to be processed.
-     * @param {number} numberOfProblems The number of problems to be solved.
-     * @param {number[]} dimention The dimention of the matrix that engine
-     * works on.
-     * @param {number} endOfMatrix The line number containing the last row
-     * of matrix.
+     * Constructor of the Engine class.
+     * @param {IValidatorService} validator The validator service interface.
+     * @param {IFileService} fileService The file service interface.
      */
-  constructor(filePath: string) {
-    this.filePath = filePath;
-    this.rl = [];
-    this.numberOfProblems = 0;
+  constructor(
+      validator: IValidatorService,
+      fileService: IFileService,
+  ) {
+    this.validator = validator;
+    this.fs = fileService;
     this.dimention = [];
     this.endOfMatrix = 0;
     this.matrix = [];
     this.problemMatrices = [];
     this.solutionMatrices = [];
-    this.validator = new Validation(this.filePath);
   }
 
-  /**
-     * This method creates a readline interface of each instance of
-     * Engine class
-     * @return {readline.ReadLine} The readline interface.
-     */
-  createReadlineInterface(): readline.ReadLine {
-    if (this.rl.length > 0) {
-      return this.rl[0];
-    } else {
-      try {
-        const input = fs.createReadStream(this.filePath);
-        const rl = readline.createInterface({
-          input: input,
-        });
-        this.rl.push(rl);
-        return rl;
-      } catch (error) {
-        console.log('Bad file path');
-        throw new Error(`Error while creating readline interface: ${error}`);
-      }
-    }
-  }
 
   /**
    * This method is responsible for handling the validation of first line
@@ -103,9 +69,7 @@ export class Engine {
    */
   numberOfProblemsHandler(line: string): void {
     const numberOfProblems = this.validator.isValidNumberOfProblems(line);
-    if (numberOfProblems > 0) {
-      this.numberOfProblems = numberOfProblems;
-    } else {
+    if (numberOfProblems === 0) {
       throw new Error(`Invalid number of problems \
                       ${this.validator.isValidNumberOfProblems(line)}`);
     }
@@ -213,12 +177,9 @@ export class Engine {
    * This method is responsible for writing the solution to the file.
    */
   async writeResults() {
-    const resultPath = path.basename(this.filePath, '.txt') + '_result.txt';
-    const ws = fs.createWriteStream(resultPath);
-
     for (const matrix of this.solutionMatrices) {
       const data = matrix.map((row) => row.join(' ')).join('\n');
-      ws.write(data + '\n');
+      this.fs.write(data);
     }
   }
 
@@ -231,18 +192,10 @@ export class Engine {
      */
   async processLineByLine(): Promise<number[][][]> {
     if (!this.validator.isValidAddress) {
-      throw new Error(`Invalid file path: ${this.filePath}`);
+      throw new Error('Invalid file path');
     }
-    try {
-      this.createReadlineInterface();
-    } catch (error) {
-      throw new Error(`Error while creating readline interface: ${error}`);
-    }
-
     let cursor = 0;
-    const rl = this.rl[0];
-
-    for await (const line of rl) {
+    for await (const line of this.fs.readline) {
       cursor ++;
       try {
         this.cursorHandler(cursor, line);

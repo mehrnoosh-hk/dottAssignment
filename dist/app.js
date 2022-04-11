@@ -4,36 +4,25 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const engine_1 = require("./utilities/engine");
-const inquirer_1 = require("inquirer");
+const userInput_1 = require("./utilities/userInput");
 const chalk_1 = __importDefault(require("chalk"));
-/**
- * This method asks user to submit file path to test cases.
- * @return {string} user answer
- */
-async function takeInput() {
-    const answer = await (0, inquirer_1.prompt)([{
-            name: 'path',
-            message: 'Please enter files path to test cases seperated with space: \
-    example: /path/to/file/one /path/to/file/two',
-        }]);
-    return answer;
-}
+const classValidator_1 = require("./utilities/classValidator");
+const config_1 = require("./utilities/config");
+const fileService_1 = require("./utilities/fileService");
 /**
  * The entry point of the program.
  */
 async function main() {
-    const answer = await takeInput();
-    const addresses = answer['path'].split(' ');
-    for (const address of addresses) {
-        const engine = new engine_1.Engine(address);
-        try {
-            const data = await engine.processLineByLine();
-            console.log(data);
-        }
-        catch (error) {
-            console.log(chalk_1.default.red(`Error while processing file: ${address}`));
-            console.log(chalk_1.default.red(error));
-        }
+    const config = await (0, userInput_1.testFileConfig)();
+    const fileConfig = new config_1.FileConfig(config.filePath, config.maxNumberOfProblems, config.validDimention, config.dimentionSeperator, config.rowElementSeprator, config.resultSeperator);
+    const engine = new engine_1.Engine(new classValidator_1.Validation(fileConfig), new fileService_1.FileService(fileConfig));
+    try {
+        const data = await engine.processLineByLine();
+        console.log(data);
+    }
+    catch (error) {
+        console.log(chalk_1.default.red(`Error while processing file: ${config.filePath}`));
+        console.log(chalk_1.default.red(error));
     }
 }
 main();
