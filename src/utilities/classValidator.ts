@@ -1,63 +1,36 @@
 import * as fs from 'fs';
+import { FileConfig } from './config';
+
+/**
+ * Interface for the validator service.
+ */
+export interface IValidatorService {
+  isValidAddress(): boolean;
+  isValidNumberOfProblems(value: string): number;
+  isValidDimention(value: string): number[];
+  isValidRow(value:string, nOfColumns: number): number[];
+}
+
+
 /**
  * Validation class contains all methods to validate the input file.
  * All parameters have a default value to determain how the validation
  * will be done. unless the user specifies otherwise.
  */
-
-export type fileConfig = {
-  filePath: string,
-  validNumberOfProblems?: number,
-  validDimention?: number,
-  dimentionSeprator?: string,
-  rowElementSeprator?: string,
-}
-
-export class Validation {
-  /**
-     * @property {string} filePath The path of the file to be processed.
-     */
-  public filePath: string;
+export class Validation implements IValidatorService {
 
   /**
-     * @property {number} This property shows the acceptable number of problems
-     */
-  public validNumberOfProblems: number;
-  /**
-     * @property {number} This property shows the acceptable dimention of
-     * the matrix
-     */
-  public validDimention: number;
-  /**
-     * @property {string} This property shows the seperator of the dimentions
-     * of the matrix in test file
-     */
-  public dimentionSeperator: string;
-  /**
-     * @property {string} This property shows the seperator of the row
-     * elements in test file
-     */
-  public rowElementSeperator: string;
+   * @property {FileConfig} fileConfig The configuration of the submitted problem file.
+   */
+  public config:FileConfig;
 
 
   /**
      * constructor of the class Validator
-     * @param {string} filepath The path of the file to be validated
-     * @param {number} validNumberOfProblems
-     * @param {number} validDimention
-     * @param {string} dimentionSeperator
-     * @param {string} rowElementSeperator
+     * @param {FileConfig} config The configuration of the submitted problem file. 
      */
-  constructor(filepath: string,
-      validNumberOfProblems: number = 1000,
-      validDimention: number = 182,
-      dimentionSeperator: string = ' ',
-      rowElementSeperator: string = '') {
-    this.filePath = filepath;
-    this.validNumberOfProblems = validNumberOfProblems;
-    this.validDimention = validDimention;
-    this.dimentionSeperator = dimentionSeperator;
-    this.rowElementSeperator = rowElementSeperator;
+  constructor (config: FileConfig) {
+    this.config = config;
   }
 
   /**
@@ -65,7 +38,7 @@ export class Validation {
    * @return {boolean}
    */
   isValidAddress(): boolean {
-    return fs.existsSync(this.filePath);
+    return fs.existsSync(this.config.filePath);
   }
 
   /**
@@ -76,7 +49,7 @@ export class Validation {
    * if it is valid otherwise 0
    */
   isValidNumberOfProblems(value: string): number {
-    if (Number(value) <= this.validNumberOfProblems && Number(value) > 0 &&
+    if (Number(value) <= this.config.maxNumberOfProblems && Number(value) > 0 &&
             Number(value) % 1 === 0) {
       return Number(value);
     }
@@ -91,11 +64,11 @@ export class Validation {
      * @return {number | boolean}
      */
   isValidDimention(value: string): number[] {
-    const dimention: number[] = value.split(this.dimentionSeperator)
+    const dimention: number[] = value.split(this.config.dimentionSeperator)
         .map(Number);
     if (dimention.every((element) => element !== NaN) &&
         dimention.every((element) =>
-          element <= this.validDimention && element > 0 &&
+          element <= this.config.validDimention && element > 0 &&
         dimention.length === 2)) {
       return dimention;
     }
@@ -111,7 +84,7 @@ export class Validation {
      * @return {number[] | boolean}
      */
   isValidRow(value: string, cols: number): number[] {
-    const row = value.split(this.rowElementSeperator).map(Number);
+    const row = value.split(this.config.rowElementSeperator).map(Number);
     if (row.every((element) => element === 0 || element === 1) &&
             row.length === cols) {
       return row;

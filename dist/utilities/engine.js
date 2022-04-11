@@ -1,23 +1,4 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 var __asyncValues = (this && this.__asyncValues) || function (o) {
     if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
     var m = o[Symbol.asyncIterator], i;
@@ -27,11 +8,7 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Engine = void 0;
-const readline = __importStar(require("readline"));
-const fs = __importStar(require("fs"));
 const nearestNode_1 = require("./nearestNode");
-const classValidator_1 = require("./classValidator");
-const path = __importStar(require("path"));
 /**
  * A class that manage all steps of reading, validation and sending the
  * problems to be solved and gather the results.
@@ -39,47 +16,19 @@ const path = __importStar(require("path"));
 class Engine {
     /**
        *
-       * @param {string} filePath The path of the file to be processed.
-       * @param {number} numberOfProblems The number of problems to be solved.
        * @param {number[]} dimention The dimention of the matrix that engine
        * works on.
        * @param {number} endOfMatrix The line number containing the last row
        * of matrix.
        */
-    constructor(filePath) {
-        this.filePath = filePath;
-        this.rl = [];
-        this.numberOfProblems = 0;
+    constructor(validator, fileService) {
+        this.validator = validator;
+        this.fs = fileService;
         this.dimention = [];
         this.endOfMatrix = 0;
         this.matrix = [];
         this.problemMatrices = [];
         this.solutionMatrices = [];
-        this.validator = new classValidator_1.Validation(this.filePath);
-    }
-    /**
-       * This method creates a readline interface of each instance of
-       * Engine class
-       * @return {readline.ReadLine} The readline interface.
-       */
-    createReadlineInterface() {
-        if (this.rl.length > 0) {
-            return this.rl[0];
-        }
-        else {
-            try {
-                const input = fs.createReadStream(this.filePath);
-                const rl = readline.createInterface({
-                    input: input,
-                });
-                this.rl.push(rl);
-                return rl;
-            }
-            catch (error) {
-                console.log('Bad file path');
-                throw new Error(`Error while creating readline interface: ${error}`);
-            }
-        }
     }
     /**
      * This method is responsible for handling the validation of first line
@@ -88,10 +37,7 @@ class Engine {
      */
     numberOfProblemsHandler(line) {
         const numberOfProblems = this.validator.isValidNumberOfProblems(line);
-        if (numberOfProblems > 0) {
-            this.numberOfProblems = numberOfProblems;
-        }
-        else {
+        if (numberOfProblems === 0) {
             throw new Error(`Invalid number of problems \
                       ${this.validator.isValidNumberOfProblems(line)}`);
         }
@@ -201,11 +147,9 @@ class Engine {
      * This method is responsible for writing the solution to the file.
      */
     async writeResults() {
-        const resultPath = path.basename(this.filePath, '.txt') + '_result.txt';
-        const ws = fs.createWriteStream(resultPath);
         for (const matrix of this.solutionMatrices) {
             const data = matrix.map((row) => row.join(' ')).join('\n');
-            ws.write(data + '\n');
+            this.fs.write(data);
         }
     }
     /**
@@ -217,19 +161,12 @@ class Engine {
     async processLineByLine() {
         var e_1, _a;
         if (!this.validator.isValidAddress) {
-            throw new Error(`Invalid file path: ${this.filePath}`);
-        }
-        try {
-            this.createReadlineInterface();
-        }
-        catch (error) {
-            throw new Error(`Error while creating readline interface: ${error}`);
+            throw new Error('Invalid file path');
         }
         let cursor = 0;
-        const rl = this.rl[0];
         try {
-            for (var rl_1 = __asyncValues(rl), rl_1_1; rl_1_1 = await rl_1.next(), !rl_1_1.done;) {
-                const line = rl_1_1.value;
+            for (var _b = __asyncValues(this.fs.readline), _c; _c = await _b.next(), !_c.done;) {
+                const line = _c.value;
                 cursor++;
                 try {
                     this.cursorHandler(cursor, line);
@@ -242,7 +179,7 @@ class Engine {
         catch (e_1_1) { e_1 = { error: e_1_1 }; }
         finally {
             try {
-                if (rl_1_1 && !rl_1_1.done && (_a = rl_1.return)) await _a.call(rl_1);
+                if (_c && !_c.done && (_a = _b.return)) await _a.call(_b);
             }
             finally { if (e_1) throw e_1.error; }
         }

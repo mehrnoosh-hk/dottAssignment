@@ -1,7 +1,18 @@
 import {Validation} from '../../src/utilities/classValidator';
+import {FileConfig} from '../../src/utilities/config';
 
 describe('Test validators', () => {
-  const validator = new Validation('mockFiles/mockFile.txt');
+
+  const mockConfig: FileConfig = {
+    filePath: '../mockFiles/mockFile.txt',
+    maxNumberOfProblems: 1000,
+    validDimention: 182,
+    dimentionSeperator: ' ',
+    rowElementSeperator: '',
+    resultSeperator: ' ',
+    testCaseSeperator: '\n',
+  }
+  const validator = new Validation(mockConfig);
 
   test('Test validator.isValidNumberOfProblems', () => {
     expect(validator.isValidNumberOfProblems('10')).toBe(10);
