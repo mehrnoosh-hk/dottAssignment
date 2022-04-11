@@ -6,7 +6,7 @@ import {Validation} from '../../src/utilities/classValidator';
 describe('Test engine class', () => {
 
   const mockConfig: FileConfig = {
-    filePath: '/home/mehrnoush/Documents/Programming/dottAssignment/mockFiles/mockFile.txt',
+    filePath: './mockFiles/mockFile.txt',
     maxNumberOfProblems: 1000,
     validDimention: 182,
     dimentionSeperator: ' ',
